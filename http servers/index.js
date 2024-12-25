@@ -39,10 +39,20 @@ app.post("/", function(req, res){
 })
 
 app.put("/", function(req, res){
-    for(i = 0; i < users[0].kidneys.length; i++){
-        users[0].kidneys[i].healthy = true ;
-    }
-    res.json({});
+    if (allHealthyKidneys()){
+
+        res.status(411).json({
+            msg :"Wrong Input"
+        })
+    }else{
+        for(i = 0; i < users[0].kidneys.length; i++){
+            users[0].kidneys[i].healthy = true ;
+           }
+        res.json({
+           msg : "Done!"
+        });
+    } 
+
 })
 
 app.delete("/", function(req, res){
@@ -75,6 +85,16 @@ function isThereAtLeastOneUnhealthyKidney(){
         }
     }
     return atLeatOneUnhealthyKidney;
+}
+
+function allHealthyKidneys(){
+    let isThereOneUnhealthyKidney = false ;
+    for( i = 0; i < users[0].kidneys.length; i++){
+        if(users[0].kidneys[i].healthy){
+            isThereOneUnhealthyKidney = true;
+        }
+    }
+    return isThereOneUnhealthyKidney;
 }
 
 app.listen(3000);
